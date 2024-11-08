@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Control de LEDs</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+  <div class="container">
+    <h1>Administración de LEDs</h1>
+
+    <section>
+      <h2>Host del servidor</h2>
+      <input type="url" name="server-ip" id="server-ip" placeholder="IP del ESP8266" value="192.168.4.1" required>
+    </section>
+
+    <!-- Mostrar todos los LEDs -->
+    <section>
+      <h2>Listar LEDs</h2>
+      <button onclick="fetchLEDs()">Ver todos los LEDs</button>
+      <div id="led-list"></div>
+    </section>
+
+    <!-- Buscar LED por ID -->
+    <section>
+      <h2>Buscar LED por ID</h2>
+      <input type="number" id="led-id" placeholder="ID del LED">
+      <button onclick="fetchLEDById()">Buscar</button>
+      <div id="led-details"></div>
+    </section>
+
+    <!-- Crear un LED -->
+    <section>
+      <h2>Crear un nuevo LED</h2>
+      <input type="number" id="new-led-pin" placeholder="Pin del LED">
+      <select id="new-led-logica">
+        <option value="HIGH">HIGH</option>
+        <option value="LOW">LOW</option>
+      </select>
+      <button onclick="createLED()">Crear LED</button>
+      <div id="creation-result"></div>
+    </section>
+
+    <!-- Cambiar estado del LED -->
+    <section>
+      <h2>Actualizar estado del LED</h2>
+      <input type="number" id="update-led-id" placeholder="ID del LED">
+      <select id="update-led-estado">
+        <option value="on">on</option>
+        <option value="off">off</option>
+        <option value="toggle">toggle</option>
+      </select>
+      <button onclick="updateLED()">Actualizar estado</button>
+      <div id="update-result"></div>
+    </section>
+
+    <!-- Eliminar LED -->
+    <section>
+      <h2>Eliminar LED</h2>
+      <input type="number" id="delete-led-id" placeholder="ID del LED">
+      <button onclick="deleteLED()">Eliminar</button>
+      <div id="deletion-result"></div>
+    </section>
+  </div>
+
+  <script src="js/scripts.js"></script>
+</body>
+
+</html>
