@@ -73,7 +73,7 @@ size_t cantLedsActivos{0};
  */
 void handleRequestBody(uint8_t *data, size_t len, String &body) {
   body.reserve(body.length() + len);
-  for (size_t i = 0; i < len; ++i) body += char(data[i]);
+  for (size_t i{0}; i < len; ++i) body += char(data[i]);
 }
 
 /**
@@ -96,7 +96,7 @@ void readLed(AsyncWebServerRequest *req) {
     // en pathArg(0) hay un string del tipo "/X" donde X es un número entero.
     // por eso se filtra el '/' inicial utilizando substring().
 
-    Led *led_found = nullptr;
+    Led *led_found{nullptr};
     for (auto &led : leds) {
       if (led != nullptr && led->getID() == id) {
         led_found = led;
@@ -108,7 +108,7 @@ void readLed(AsyncWebServerRequest *req) {
 
   } else {
     // *** Si se pidieron todos los LEDs ***
-    String response = "[";
+    String response{"["};
     for (auto &led : leds) {
       if (led != nullptr) response += led->toJson() + ',';
     }
@@ -143,7 +143,7 @@ void createLed(AsyncWebServerRequest *req, uint8_t *data, size_t len,
   handleRequestBody(data, len, body);
   if ((index + len) == total) {
     JsonDocument doc;
-    DeserializationError error = deserializeJson(doc, body);
+    DeserializationError error{deserializeJson(doc, body)};
     if (error) {
       req->send(400, "application/json", INVALID_JSON);
       return;
@@ -194,7 +194,7 @@ void updateLed(AsyncWebServerRequest *req, uint8_t *data, size_t len,
   handleRequestBody(data, len, body);
   if ((index + len) == total) {
     JsonDocument doc;
-    DeserializationError error = deserializeJson(doc, body);
+    DeserializationError error{deserializeJson(doc, body)};
     if (error) {
       req->send(400, "application/json", INVALID_JSON);
       return;
@@ -206,7 +206,7 @@ void updateLed(AsyncWebServerRequest *req, uint8_t *data, size_t len,
     int id{req->pathArg(0).toInt()};
     String estado{doc["estado"]};
     estado.toLowerCase();
-    Led *led_found = nullptr;
+    Led *led_found{nullptr};
     for (auto &led : leds) {
       if (led != nullptr && led->getID() == id) {
         led_found = led;
@@ -235,23 +235,20 @@ void updateLed(AsyncWebServerRequest *req, uint8_t *data, size_t len,
  * @param req AsyncWebServerRequest* request del cliente.
  */
 void deleteLed(AsyncWebServerRequest *req) {
-  if (req->pathArg(0) != "") {
-    int id{req->pathArg(0).toInt()};
-    bool isDeleted = false;
-    for (auto &led : leds) {
-      if (led != nullptr && led->getID() == id) {
-        delete led;
-        led = nullptr;
-        isDeleted = true;
-        cantLedsActivos--;
-        break;
-      }
+  int id{req->pathArg(0).toInt()};
+  bool isDeleted = false;
+  for (auto &led : leds) {
+    if (led != nullptr && led->getID() == id) {
+      delete led;
+      led = nullptr;
+      isDeleted = true;
+      cantLedsActivos--;
+      break;
     }
-    if (isDeleted)
-      req->send(200, "application/json", "{\"message\":\"LED '" + req->pathArg(0) + "' borrado.\"}\n");
-    else req->send(404, "application/json", NOT_FOUND);
-
   }
+  if (isDeleted)
+    req->send(200, "application/json", "{\"message\":\"LED '" + req->pathArg(0) + "' borrado.\"}\n");
+  else req->send(404, "application/json", NOT_FOUND);
 }
 
 /**
@@ -259,9 +256,7 @@ void deleteLed(AsyncWebServerRequest *req) {
  * 
  */
 void initLEDArray() {
-  for (auto &led : leds) {
-    led = nullptr;
-  }
+  for (auto &led : leds) led = nullptr;
 }
 
 /**
